@@ -157,7 +157,7 @@ const TODAY=Date.UTC(now.getFullYear(),now.getMonth(),now.getDate());
 
 function getCsvUrl(){
   const q=new URLSearchParams(location.search).get('csv');
-  return (q&&q.trim()) || (CONFIG.CSV_URL&&CONFIG.CSV_URL.trim()) || "";
+  return (q&&q.trim()) || (CONFIG.CSV_URL&&CONFIG.CSV_URL.trim()) || "https://docs.google.com/spreadsheets/d/e/2PACX-1vRtNxWUYpE861UDpmmvchsDEutalTpumBwfQG3qvTUsA2IVPdQWA-CXNT94xif_hQ/pub?gid=462054744&single=true&output=csv";
 }
 
 /* ---- CSV parser (maneja comillas, comas y saltos de línea internos) ---- */
