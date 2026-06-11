@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Plan Plaza Logística 2026 · Passapp</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Montserrat:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cyan:#0ADBDB; --green:#2BE65E; --navy:#003350; --gray:#5B5D66;
+    --grad:linear-gradient(90deg,#0ADBDB 0%,#2BE65E 100%);
+    --ink:#1c2733; --muted:#5B5D66; --line:#e7eaee; --line2:#d7dce2;
+    --bg:#f4f6f8; --surface:#ffffff;
+    --c-lara:#0B7285; --c-facu:#1C7ED6; --c-emma:#7048E8; --c-diego:#E8590C;
+    --pend:#9aa3ad; --curso:#1098AD; --done:#2BA84A; --late:#E03131;
+    --radius:14px;
+  }
+  *{box-sizing:border-box} html,body{margin:0}
+  body{font-family:'Lato',system-ui,sans-serif;color:var(--ink);background:var(--bg);-webkit-font-smoothing:antialiased;line-height:1.5}
+  h1,h2,h3{font-family:'Montserrat',sans-serif;margin:0;letter-spacing:-.01em}
+  .wrap{max-width:1180px;margin:0 auto;padding:0 20px 64px}
+  header{background:var(--navy);color:#fff}
+  .hd{max-width:1180px;margin:0 auto;padding:22px 20px;display:flex;align-items:center;gap:18px;flex-wrap:wrap}
+  .brandmark{width:34px;height:34px;border-radius:9px;background:var(--grad);flex:0 0 auto}
+  .hd h1{font-size:20px;font-weight:700;color:#fff}
+  .hd .sub{font-size:13px;color:#9fc6cf;margin-top:2px}
+  .hd .gen{margin-left:auto;min-width:230px}
+  .gen .lab{display:flex;justify-content:space-between;font-size:12px;color:#bcd;margin-bottom:6px}
+  .gen .lab b{color:#fff;font-weight:700}
+  .genbar{height:10px;border-radius:6px;background:rgba(255,255,255,.14);overflow:hidden}
+  .genbar>i{display:block;height:100%;background:var(--grad);border-radius:6px;transition:width .5s}
+  .refresh{margin-left:14px;border:1px solid rgba(255,255,255,.3);background:rgba(255,255,255,.08);color:#fff;border-radius:8px;padding:7px 12px;font-size:12.5px;cursor:pointer;font-family:'Lato'}
+  .refresh:hover{background:rgba(255,255,255,.16)}
+  .upd{font-size:11.5px;color:#9fc6cf;margin-top:8px;width:100%;text-align:right}
+
+  .kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin:22px 0}
+  .kpi{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:16px 18px}
+  .kpi .n{font-family:'Montserrat';font-size:30px;font-weight:700;line-height:1}
+  .kpi .t{font-size:12.5px;color:var(--muted);margin-top:7px;text-transform:uppercase;letter-spacing:.04em}
+  .kpi .x{font-size:12px;color:var(--muted);margin-top:3px}
+  .kpi.done .n{color:var(--done)} .kpi.curso .n{color:var(--curso)} .kpi.late .n{color:var(--late)}
+
+  .panel{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:18px 20px;margin-bottom:20px}
+  .panel h2{font-size:15px;font-weight:600;margin-bottom:2px}
+  .panel .ph{font-size:12.5px;color:var(--muted);margin-bottom:16px}
+
+  .filters{display:flex;gap:22px;flex-wrap:wrap;align-items:flex-start}
+  .fgroup .fl{font-size:11.5px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);margin-bottom:8px;font-weight:700;font-family:'Montserrat'}
+  .chips{display:flex;gap:7px;flex-wrap:wrap}
+  .chip{border:1px solid var(--line2);background:#fff;color:var(--ink);border-radius:999px;padding:6px 13px;font-size:13px;cursor:pointer;transition:.15s;display:inline-flex;align-items:center;gap:7px}
+  .chip:hover{border-color:#aeb6c0}
+  .chip.on{background:var(--navy);border-color:var(--navy);color:#fff}
+  .chip .dot{width:9px;height:9px;border-radius:50%}
+  .clearbtn{margin-left:auto;align-self:center;border:none;background:none;color:var(--c-facu);font-size:13px;cursor:pointer;padding:6px 2px}
+  .clearbtn:hover{text-decoration:underline}
+
+  .roadwrap{position:relative;overflow-x:auto}
+  #road{display:block;min-width:760px}
+  .dot{cursor:pointer}
+  .tip{position:absolute;pointer-events:none;z-index:30;background:var(--navy);color:#fff;border-radius:10px;padding:11px 13px;max-width:280px;font-size:12.5px;line-height:1.45;box-shadow:0 8px 24px rgba(0,30,50,.25);opacity:0;transform:translateY(4px);transition:opacity .12s}
+  .tip.show{opacity:1;transform:none}
+  .tip .o{font-weight:700;font-family:'Montserrat';font-size:13px;margin-bottom:6px}
+  .tip .meta{color:#bcd;display:flex;gap:6px;align-items:center;margin-top:3px}
+  .tip .pill{display:inline-block;padding:1px 8px;border-radius:999px;font-size:11px;font-weight:700;color:#fff}
+  .legend{display:flex;gap:18px;flex-wrap:wrap;margin-top:14px;font-size:12.5px;color:var(--muted);align-items:center}
+  .legend .grp{display:flex;gap:9px;flex-wrap:wrap;align-items:center}
+  .lg{display:inline-flex;align-items:center;gap:6px}
+  .lg .sw{width:11px;height:11px;border-radius:50%}
+  .legend .sep{width:1px;height:16px;background:var(--line2)}
+
+  .two{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+  .prow{margin-bottom:14px} .prow:last-child{margin-bottom:0}
+  .prow .top{display:flex;justify-content:space-between;font-size:13px;margin-bottom:6px}
+  .prow .top .nm{font-weight:700;font-family:'Montserrat';font-size:13px}
+  .prow .top .vl{color:var(--muted)}
+  .track{height:9px;border-radius:6px;background:#eef1f4;overflow:hidden}
+  .track>i{display:block;height:100%;border-radius:6px;background:var(--grad);transition:width .45s}
+  .loadrow{display:flex;align-items:center;gap:10px;margin-bottom:11px;font-size:13px}
+  .loadrow .nm{width:58px;font-weight:700;font-family:'Montserrat';display:flex;align-items:center;gap:7px}
+  .loadrow .nm .sw{width:10px;height:10px;border-radius:50%}
+  .loadrow .barwrap{flex:1;height:20px;background:#eef1f4;border-radius:6px;overflow:hidden;display:flex}
+  .loadrow .barwrap i{display:block;height:100%}
+  .loadrow .barwrap i.done{background:var(--done)} .loadrow .barwrap i.rest{background:#cfd6dd}
+  .loadrow .cnt{width:74px;text-align:right;color:var(--muted);font-size:12px}
+
+  table{width:100%;border-collapse:collapse;font-size:13px}
+  thead th{text-align:left;font-family:'Montserrat';font-weight:600;font-size:11.5px;text-transform:uppercase;letter-spacing:.04em;color:var(--muted);padding:9px 10px;border-bottom:1px solid var(--line2);cursor:pointer;user-select:none}
+  thead th:hover{color:var(--ink)}
+  tbody td{padding:10px;border-bottom:1px solid var(--line);vertical-align:middle}
+  tbody tr:hover{background:#f8fafb}
+  tr.flash{animation:flash 1.4s ease}
+  @keyframes flash{0%,30%{background:#e7fbf3}100%{background:transparent}}
+  .badge{display:inline-block;padding:2px 9px;border-radius:7px;font-size:11.5px;font-weight:700;background:#eef2f6;color:#445}
+  .resp{display:inline-flex;align-items:center;gap:7px;font-weight:700;font-family:'Montserrat';font-size:12.5px}
+  .resp .sw{width:10px;height:10px;border-radius:50%}
+  .estTag{display:inline-block;padding:3px 10px;border-radius:7px;font-size:12px;font-weight:700}
+  .et-pend{background:#f1f3f5;color:#868e96}.et-curso{background:#c5f6fa;color:#0b7285}.et-done{background:#d3f9d8;color:#2b8a3e}.et-late{background:#ffe3e3;color:#c92a2a}
+  .td-obj{max-width:430px}
+  .vence{font-size:11.5px;color:var(--muted)} .vence.lateTxt{color:var(--late);font-weight:700}
+  .empty{padding:30px;text-align:center;color:var(--muted)}
+
+  .setup{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:26px;margin:24px 0}
+  .setup h2{font-size:17px;margin-bottom:10px;color:var(--navy)}
+  .setup ol{margin:12px 0 0;padding-left:20px;font-size:14px} .setup li{margin-bottom:8px}
+  .setup code{background:#f1f3f5;padding:2px 6px;border-radius:5px;font-size:12.5px}
+  .setup input{width:100%;margin-top:14px;padding:11px 12px;border:1px solid var(--line2);border-radius:8px;font-size:13px;font-family:'Lato'}
+  .setup button{margin-top:12px;background:var(--navy);color:#fff;border:none;border-radius:8px;padding:11px 18px;font-size:14px;cursor:pointer;font-family:'Montserrat';font-weight:600}
+  .setup .err{color:var(--late);font-size:13px;margin-top:12px}
+  .state{padding:50px;text-align:center;color:var(--muted)}
+  @media(max-width:860px){.kpis{grid-template-columns:repeat(2,1fr)}.two{grid-template-columns:1fr}.hd .gen{margin-left:0;width:100%}}
+</style>
+</head>
+<body>
+<header>
+  <div class="hd">
+    <div class="brandmark"></div>
+    <div>
+      <h1>Plan de implementación · Plaza Logística 2026</h1>
+      <div class="sub">Vista en vivo del avance · datos desde Google Sheets</div>
+    </div>
+    <div class="gen">
+      <div class="lab"><span>Avance general</span><b id="genTxt">—</b></div>
+      <div class="genbar"><i id="genBar" style="width:0%"></i></div>
+    </div>
+    <button class="refresh" id="refreshBtn" style="display:none">↻ Actualizar</button>
+    <div class="upd" id="updTxt"></div>
+  </div>
+</header>
+
+<div class="wrap">
+  <div id="app"></div>
+</div>
+
+<script>
+/* ====================================================================
+   CONFIGURACIÓN — pegá acá la URL CSV de tu Google Sheet publicado.
+   (Archivo → Compartir → Publicar en la web → hoja "Hitos" → CSV)
+   También podés pasarla por la URL del visor:  ...index.html?csv=LA_URL
+   ==================================================================== */
+const CONFIG = {
+  CSV_URL: ""   // <-- pegá la URL del CSV publicado entre las comillas
+};
+/* ==================================================================== */
+
+const RC_HEX={Lara:"#0B7285",Facu:"#1C7ED6",Emma:"#7048E8",Diego:"#E8590C"};
+const PALETTE=["#0B7285","#1C7ED6","#7048E8","#E8590C","#2B8A3E","#9C36B5","#1864AB","#C2255C"];
+const respColors={};
+function colorFor(name){ if(RC_HEX[name])return RC_HEX[name]; if(!respColors[name]) respColors[name]=PALETTE[Object.keys(respColors).length%PALETTE.length]; return respColors[name]; }
+
+let DATA=[], ETAPAS=[], RESP=[];
+let filters={etapa:null,responsable:null,estado:null};
+let sortKey="deadline", sortDir=1;
+const now=new Date();
+const TODAY=Date.UTC(now.getFullYear(),now.getMonth(),now.getDate());
+
+function getCsvUrl(){
+  const q=new URLSearchParams(location.search).get('csv');
+  return (q&&q.trim()) || (CONFIG.CSV_URL&&CONFIG.CSV_URL.trim()) || "";
+}
+
+/* ---- CSV parser (maneja comillas, comas y saltos de línea internos) ---- */
+function parseCSV(text){
+  const rows=[]; let row=[], cur="", q=false;
+  for(let i=0;i<text.length;i++){
+    const ch=text[i];
+    if(q){
+      if(ch==='"'){ if(text[i+1]==='"'){cur+='"';i++;} else q=false; }
+      else cur+=ch;
+    } else {
+      if(ch==='"')q=true;
+      else if(ch===','){row.push(cur);cur="";}
+      else if(ch==='\n'){row.push(cur);rows.push(row);row=[];cur="";}
+      else if(ch==='\r'){}
+      else cur+=ch;
+    }
+  }
+  if(cur.length||row.length){row.push(cur);rows.push(row);}
+  return rows;
+}
+function norm(s){return (s||"").trim();}
+function stripAccents(s){return s.normalize('NFD').replace(/[\u0300-\u036f]/g,'');}
+function normEstado(s){
+  const v=stripAccents(norm(s).toLowerCase());
+  if(v.startsWith('complet'))return"Completado";
+  if(v.startsWith('en curso')||v==='curso'||v.startsWith('proceso'))return"En curso";
+  return"Pendiente";
+}
+function parseFecha(s){
+  s=norm(s);
+  let m=s.match(/^(\d{4})-(\d{1,2})-(\d{1,2})/); if(m)return Date.UTC(+m[1],+m[2]-1,+m[3]);
+  m=s.match(/^(\d{1,2})\/(\d{1,2})\/(\d{2,4})/);
+  if(m){let y=+m[3]; if(y<100)y+=2000; return Date.UTC(y,+m[2]-1,+m[1]);} // dd/mm/yyyy (es-AR)
+  const d=new Date(s); return isNaN(d)?null:Date.UTC(d.getFullYear(),d.getMonth(),d.getDate());
+}
+
+function mapRows(rows){
+  if(!rows.length)return[];
+  const head=rows[0].map(h=>stripAccents(norm(h).toLowerCase()));
+  const idx=n=>head.findIndex(h=>h===n);
+  const iO=idx('objetivo'), iE=idx('etapa'), iR=idx('responsable'), iD=idx('deadline'), iS=idx('estado');
+  if(iO<0||iE<0||iR<0||iD<0) throw new Error('headers');
+  const out=[];
+  for(let r=1;r<rows.length;r++){
+    const c=rows[r]; if(!c||!norm(c[iO]))continue;
+    const t=parseFecha(c[iD]);
+    out.push({id:"h"+r, objetivo:norm(c[iO]), etapa:norm(c[iE]), responsable:norm(c[iR]),
+              t:t, estado: iS>=0?normEstado(c[iS]):"Pendiente"});
+  }
+  return out;
+}
+
+function shortEt(et){
+  if(/eventuales/i.test(et))return"Eventuales y contratistas";
+  let m=et.match(/transportes.*?(\d)/i); if(m)return"Transportes · Etapa "+m[1];
+  return et;
+}
+function statusOf(d){ if(d.estado==="Completado")return"done"; if(d.t!=null&&d.t<TODAY)return"late"; if(d.estado==="En curso")return"curso"; return"pend"; }
+function fmt(t){ if(t==null)return"—"; return new Date(t).toLocaleDateString('es-AR',{day:'numeric',month:'short',year:'numeric',timeZone:'UTC'}); }
+function daysLeft(t){return Math.round((t-TODAY)/86400000);}
+function filtered(){
+  return DATA.filter(d=>{
+    if(filters.etapa&&d.etapa!==filters.etapa)return false;
+    if(filters.responsable&&d.responsable!==filters.responsable)return false;
+    if(filters.estado){const map={"Pendiente":"pend","En curso":"curso","Completado":"done","Atrasado":"late"};if(map[filters.estado]!==statusOf(d))return false;}
+    return true;
+  });
+}
+
+/* ---------------- Loading ---------------- */
+async function load(){
+  const url=getCsvUrl();
+  if(!url){ renderSetup(); return; }
+  document.getElementById('app').innerHTML='<div class="state">Cargando datos del Google Sheet…</div>';
+  try{
+    const sep=url.includes('?')?'&':'?';
+    const res=await fetch(url+sep+'_t='+Date.now());
+    if(!res.ok)throw new Error('http '+res.status);
+    const txt=await res.text();
+    if(/^<!DOCTYPE|<html/i.test(txt.slice(0,200))) throw new Error('html'); // not published / private
+    const rows=parseCSV(txt);
+    DATA=mapRows(rows);
+    if(!DATA.length)throw new Error('empty');
+    ETAPAS=[...new Set(DATA.map(d=>d.etapa))].sort((a,b)=>{
+      const ma=Math.min(...DATA.filter(d=>d.etapa===a&&d.t!=null).map(d=>d.t));
+      const mb=Math.min(...DATA.filter(d=>d.etapa===b&&d.t!=null).map(d=>d.t));
+      return ma-mb;
+    });
+    RESP=[...new Set(DATA.map(d=>d.responsable))].sort((a,b)=>DATA.filter(d=>d.responsable===b).length-DATA.filter(d=>d.responsable===a).length);
+    document.getElementById('refreshBtn').style.display='';
+    document.getElementById('updTxt').textContent='Actualizado '+now.toLocaleString('es-AR');
+    renderApp(); render();
+  }catch(e){
+    renderError(e.message,url);
+  }
+}
+function renderSetup(){
+  document.getElementById('app').innerHTML=`<div class="setup">
+    <h2>Conectá tu Google Sheet</h2>
+    <p>Este visor lee los datos en vivo desde la planilla publicada. Para activarlo:</p>
+    <ol>
+      <li>En tu Google Sheet: <b>Archivo → Compartir → Publicar en la web</b>.</li>
+      <li>Elegí la hoja <code>Hitos</code> y el formato <b>CSV</b>. Copiá el enlace.</li>
+      <li>Pegá ese enlace acá abajo (o editá <code>CONFIG.CSV_URL</code> en el archivo HTML).</li>
+    </ol>
+    <input id="csvIn" placeholder="https://docs.google.com/spreadsheets/d/e/…/pub?gid=0&single=true&output=csv">
+    <button onclick="(function(){var u=document.getElementById('csvIn').value.trim();if(u)location.search='?csv='+encodeURIComponent(u);})()">Cargar datos</button>
+  </div>`;
+}
+function renderError(code,url){
+  const msg = code==='headers' ? 'La planilla no tiene las columnas esperadas (Objetivo, Etapa, Responsable, Deadline, Estado).'
+    : code==='html' ? 'La URL no devolvió datos CSV. Verificá que la hoja esté <b>publicada en la web como CSV</b> (no alcanza con “compartir”).'
+    : code==='empty' ? 'Se conectó pero no encontró filas con datos.'
+    : 'No se pudo leer la planilla ('+code+').';
+  document.getElementById('app').innerHTML=`<div class="setup"><h2>No se pudieron cargar los datos</h2>
+    <div class="err">${msg}</div>
+    <input id="csvIn" value="${(url||'').replace(/"/g,'&quot;')}">
+    <button onclick="(function(){var u=document.getElementById('csvIn').value.trim();if(u)location.search='?csv='+encodeURIComponent(u);})()">Reintentar con esta URL</button>
+  </div>`;
+}
+
+/* ---------------- App skeleton ---------------- */
+function renderApp(){
+  document.getElementById('app').innerHTML=`
+  <div class="kpis">
+    <div class="kpi"><div class="n" id="kTotal">0</div><div class="t">Hitos</div><div class="x" id="kTotalX"></div></div>
+    <div class="kpi done"><div class="n" id="kDone">0</div><div class="t">Completados</div><div class="x" id="kDoneX"></div></div>
+    <div class="kpi curso"><div class="n" id="kCurso">0</div><div class="t">En curso</div><div class="x">activos ahora</div></div>
+    <div class="kpi late"><div class="n" id="kLate">0</div><div class="t">Atrasados</div><div class="x">vencidos sin cerrar</div></div>
+  </div>
+  <div class="panel"><div class="filters" id="filters"></div></div>
+  <div class="panel">
+    <h2>Cronograma por etapa</h2><div class="ph">Cada punto es un hito en su fecha límite · pasá el mouse para ver el detalle</div>
+    <div class="roadwrap" id="roadwrap"><svg id="road" role="img" aria-label="Cronograma de hitos por etapa"></svg><div class="tip" id="tip"></div></div>
+    <div class="legend" id="legend"></div>
+  </div>
+  <div class="two">
+    <div class="panel"><h2>Avance por etapa</h2><div class="ph">Completados sobre el total de cada fase</div><div id="byEtapa"></div></div>
+    <div class="panel"><h2>Carga por responsable</h2><div class="ph">Cuántos hitos tiene cada persona y cuántos cerró</div><div id="byResp"></div></div>
+  </div>
+  <div class="panel">
+    <h2>Detalle de hitos</h2><div class="ph">El estado se edita en la planilla; acá se refleja al actualizar</div>
+    <table><thead><tr>
+      <th data-k="estado">Estado</th><th data-k="objetivo">Objetivo</th><th data-k="etapa">Etapa</th><th data-k="responsable">Responsable</th><th data-k="deadline">Deadline</th>
+    </tr></thead><tbody id="tbody"></tbody></table>
+    <div class="empty" id="emptyMsg" style="display:none">No hay hitos que coincidan con los filtros.</div>
+  </div>`;
+  document.querySelectorAll('thead th').forEach(th=>th.onclick=()=>{const k=th.dataset.k;if(sortKey===k)sortDir*=-1;else{sortKey=k;sortDir=1;}buildTable();});
+}
+
+/* ---------------- Filters ---------------- */
+function buildFilters(){
+  const root=document.getElementById('filters');
+  function group(label,key,items,colorFn){
+    let h=`<div class="fgroup"><div class="fl">${label}</div><div class="chips">`;
+    h+=`<button class="chip ${filters[key]===null?'on':''}" data-k="${key}" data-v="">Todos</button>`;
+    items.forEach(it=>{const sw=colorFn?`<span class="dot" style="background:${colorFn(it)}"></span>`:'';const lbl=key==='etapa'?shortEt(it):it;h+=`<button class="chip ${filters[key]===it?'on':''}" data-k="${key}" data-v="${it}">${sw}${lbl}</button>`;});
+    return h+`</div></div>`;
+  }
+  root.innerHTML=group("Etapa","etapa",ETAPAS,null)
+    +group("Responsable","responsable",RESP,colorFor)
+    +group("Estado","estado",["Pendiente","En curso","Completado","Atrasado"],it=>({"Pendiente":"#9aa3ad","En curso":"#1098AD","Completado":"#2BA84A","Atrasado":"#E03131"}[it]))
+    +`<button class="clearbtn" id="clearF">Limpiar filtros</button>`;
+  root.querySelectorAll('.chip').forEach(c=>c.onclick=()=>{const k=c.dataset.k,v=c.dataset.v;filters[k]=v===''?null:v;render();});
+  document.getElementById('clearF').onclick=()=>{filters={etapa:null,responsable:null,estado:null};render();};
+}
+
+/* ---------------- Roadmap ---------------- */
+function roadBounds(){
+  const ts=DATA.filter(d=>d.t!=null).map(d=>d.t);
+  let mn=Math.min(...ts),mx=Math.max(...ts);
+  const a=new Date(mn),b=new Date(mx);
+  return [Date.UTC(a.getUTCFullYear(),a.getUTCMonth(),1), Date.UTC(b.getUTCFullYear(),b.getUTCMonth()+1,15)];
+}
+function buildRoad(){
+  const items=filtered();
+  const W=Math.max(760,document.getElementById('roadwrap').clientWidth);
+  const padL=150,padR=24,padT=44,laneH=78;
+  const H=padT+ETAPAS.length*laneH+10;
+  const [x0,x1]=roadBounds();
+  const X=t=>padL+(t-x0)/(x1-x0)*(W-padL-padR);
+  const svg=document.getElementById('road');
+  svg.setAttribute('viewBox',`0 0 ${W} ${H}`);svg.setAttribute('width','100%');svg.setAttribute('height',H);
+  let s=`<defs><linearGradient id="gx" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#0ADBDB"/><stop offset="1" stop-color="#2BE65E"/></linearGradient></defs>`;
+  const hx=Math.max(X(x0),Math.min(X(TODAY),W-padR));
+  s+=`<rect x="${padL}" y="${padT-8}" width="${Math.max(0,hx-padL)}" height="${ETAPAS.length*laneH}" fill="url(#gx)" opacity="0.05"/>`;
+  const d0=new Date(x0),d1=new Date(x1);
+  let my=d0.getUTCFullYear()*12+d0.getUTCMonth(), my1=d1.getUTCFullYear()*12+d1.getUTCMonth();
+  for(let mm=my;mm<=my1;mm++){
+    const yy=Math.floor(mm/12),mo=mm%12,gx=X(Date.UTC(yy,mo,1));
+    if(gx<padL-1)continue;
+    s+=`<line x1="${gx}" y1="${padT-12}" x2="${gx}" y2="${padT+ETAPAS.length*laneH-8}" stroke="#e7eaee" stroke-width="1"/>`;
+    const mn=new Date(Date.UTC(yy,mo,1)).toLocaleDateString('es-AR',{month:'short',timeZone:'UTC'});
+    s+=`<text x="${gx+5}" y="${padT-18}" font-family="Montserrat" font-size="11" fill="#9aa3ad" style="text-transform:capitalize">${mn}</text>`;
+  }
+  if(X(TODAY)>=padL&&X(TODAY)<=W-padR){
+    s+=`<line x1="${hx}" y1="${padT-26}" x2="${hx}" y2="${padT+ETAPAS.length*laneH-8}" stroke="#0ADBDB" stroke-width="2" stroke-dasharray="2 4"/>`;
+    s+=`<text x="${hx}" y="${padT-30}" text-anchor="middle" font-family="Montserrat" font-size="10.5" font-weight="700" fill="#0a9c9c">HOY</text>`;
+  }
+  ETAPAS.forEach((et,li)=>{
+    const cy=padT+li*laneH+laneH/2-4, top=padT+li*laneH-6;
+    if(li>0)s+=`<line x1="0" y1="${top}" x2="${W}" y2="${top}" stroke="#eef1f4" stroke-width="1"/>`;
+    const sl=shortEt(et); const lines = sl.includes('·')?sl.split('·').map(x=>x.trim()):(sl.length>16?[sl.split(' ').slice(0,2).join(' '),sl.split(' ').slice(2).join(' ')].filter(Boolean):[sl]);
+    const totEt=DATA.filter(d=>d.etapa===et).length;
+    const ly=cy-(lines.length-1)*8-2;
+    lines.forEach((ln,k)=>s+=`<text x="20" y="${ly+k*16}" font-family="Montserrat" font-weight="600" font-size="13" fill="#1c2733">${ln}</text>`);
+    s+=`<text x="20" y="${ly+lines.length*16}" font-family="Lato" font-size="11" fill="#9aa3ad">${totEt} hitos</text>`;
+    const laneItems=items.filter(d=>d.etapa===et&&d.t!=null).sort((a,b)=>a.t-b.t);
+    const groups={}; laneItems.forEach(d=>{(groups[d.t]=groups[d.t]||[]).push(d);});
+    Object.values(groups).forEach(g=>{
+      const n=g.length;
+      g.forEach((d,gi)=>{
+        const cx=X(d.t), oy=cy+(gi-(n-1)/2)*18, st=statusOf(d), col=colorFor(d.responsable);
+        let inner;
+        if(st==='done')inner=`<circle cx="${cx}" cy="${oy}" r="7" fill="${col}" opacity="0.4"/><path d="M${cx-3.2} ${oy} l2.2 2.4 l4.2 -4.8" stroke="#fff" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/>`;
+        else if(st==='curso')inner=`<circle cx="${cx}" cy="${oy}" r="7" fill="${col}"/><circle cx="${cx}" cy="${oy}" r="3" fill="#fff"/>`;
+        else inner=`<circle cx="${cx}" cy="${oy}" r="6.5" fill="${col}"/>`;
+        if(st==='late')inner+=`<circle cx="${cx}" cy="${oy}" r="9.5" fill="none" stroke="#E03131" stroke-width="2"/>`;
+        s+=`<g class="dot" data-id="${d.id}">${inner}<circle cx="${cx}" cy="${oy}" r="13" fill="transparent"/></g>`;
+      });
+    });
+  });
+  svg.innerHTML=s;
+  svg.querySelectorAll('.dot').forEach(g=>{
+    g.addEventListener('mousemove',ev=>showTip(ev,g.dataset.id));
+    g.addEventListener('mouseleave',()=>document.getElementById('tip').classList.remove('show'));
+    g.addEventListener('click',()=>{const r=document.getElementById('row-'+g.dataset.id);if(r){r.scrollIntoView({behavior:'smooth',block:'center'});r.classList.remove('flash');void r.offsetWidth;r.classList.add('flash');}});
+  });
+}
+const STLAB={pend:["Pendiente","#9aa3ad"],curso:["En curso","#22b8cf"],done:["Completado","#51cf66"],late:["Atrasado","#ff6b6b"]};
+function showTip(ev,id){
+  const d=DATA.find(x=>x.id===id),st=statusOf(d),lab=STLAB[st],tip=document.getElementById('tip'),wrap=document.getElementById('roadwrap');
+  const dl=d.t!=null?daysLeft(d.t):null;
+  const rel=st==='done'?'cerrado':dl==null?'':dl<0?`venció hace ${-dl} d`:dl===0?'vence hoy':`faltan ${dl} d`;
+  tip.innerHTML=`<div class="o">${d.objetivo}</div>
+    <div class="meta"><span class="pill" style="background:${colorFor(d.responsable)}">${d.responsable}</span><span class="pill" style="background:${lab[1]};color:#06303a">${lab[0]}</span></div>
+    <div class="meta">${shortEt(d.etapa)}</div><div class="meta">${fmt(d.t)}${rel?' · '+rel:''}</div>`;
+  const r=wrap.getBoundingClientRect();let lx=ev.clientX-r.left+14,ly=ev.clientY-r.top+12;if(lx>r.width-290)lx=ev.clientX-r.left-290;
+  tip.style.left=lx+'px';tip.style.top=ly+'px';tip.classList.add('show');
+}
+
+/* ---------------- KPIs + progress + table ---------------- */
+function buildKpis(){
+  const items=filtered(),tot=items.length;
+  const done=items.filter(d=>statusOf(d)==='done').length,curso=items.filter(d=>statusOf(d)==='curso').length,late=items.filter(d=>statusOf(d)==='late').length;
+  const flt=filters.etapa||filters.responsable||filters.estado;
+  document.getElementById('kTotal').textContent=tot;
+  document.getElementById('kTotalX').textContent=flt?'en la vista filtrada':'plan completo';
+  document.getElementById('kDone').textContent=done;
+  document.getElementById('kDoneX').textContent=(tot?Math.round(done/tot*100):0)+'% de la vista';
+  document.getElementById('kCurso').textContent=curso;
+  document.getElementById('kLate').textContent=late;
+  const gd=DATA.filter(d=>statusOf(d)==='done').length;
+  document.getElementById('genTxt').textContent=`${gd} / ${DATA.length}`;
+  document.getElementById('genBar').style.width=(DATA.length?gd/DATA.length*100:0)+'%';
+}
+function buildProgress(){
+  const be=document.getElementById('byEtapa');be.innerHTML='';
+  ETAPAS.forEach(et=>{const all=DATA.filter(d=>d.etapa===et),dn=all.filter(d=>statusOf(d)==='done').length,pct=all.length?Math.round(dn/all.length*100):0;
+    be.innerHTML+=`<div class="prow"><div class="top"><span class="nm">${shortEt(et)}</span><span class="vl">${dn}/${all.length} · ${pct}%</span></div><div class="track"><i style="width:${pct}%"></i></div></div>`;});
+  const br=document.getElementById('byResp');br.innerHTML='';
+  const maxN=Math.max(...RESP.map(r=>DATA.filter(d=>d.responsable===r).length));
+  RESP.forEach(r=>{const all=DATA.filter(d=>d.responsable===r),dn=all.filter(d=>statusOf(d)==='done').length,wTot=all.length/maxN*100,wDone=all.length?dn/all.length*wTot:0;
+    br.innerHTML+=`<div class="loadrow"><span class="nm"><span class="sw" style="background:${colorFor(r)}"></span>${r}</span><span class="barwrap"><i class="done" style="width:${wDone}%"></i><i class="rest" style="width:${wTot-wDone}%"></i></span><span class="cnt">${dn}/${all.length}</span></div>`;});
+}
+function buildTable(){
+  const tb=document.getElementById('tbody');let items=filtered().slice();
+  items.sort((a,b)=>{let va,vb;if(sortKey==='deadline'){va=a.t==null?Infinity:a.t;vb=b.t==null?Infinity:b.t;}else if(sortKey==='estado'){const o={pend:0,curso:1,late:2,done:3};va=o[statusOf(a)];vb=o[statusOf(b)];}else{va=(a[sortKey]||'').toString();vb=(b[sortKey]||'').toString();return sortDir*va.localeCompare(vb);}return sortDir*(va-vb);});
+  document.getElementById('emptyMsg').style.display=items.length?'none':'block';
+  const tag={pend:['et-pend','Pendiente'],curso:['et-curso','En curso'],done:['et-done','Completado'],late:['et-late','Atrasado']};
+  tb.innerHTML=items.map(d=>{const st=statusOf(d),dl=d.t!=null?daysLeft(d.t):null;
+    const vtxt=st==='done'?'—':dl==null?'':dl<0?`venció hace ${-dl} d`:dl===0?'vence hoy':`en ${dl} d`;
+    return `<tr id="row-${d.id}">
+      <td><span class="estTag ${tag[st][0]}">${tag[st][1]}</span></td>
+      <td class="td-obj">${d.objetivo}</td>
+      <td><span class="badge">${shortEt(d.etapa)}</span></td>
+      <td><span class="resp"><span class="sw" style="background:${colorFor(d.responsable)}"></span>${d.responsable}</span></td>
+      <td>${fmt(d.t)}<div class="vence ${st==='late'?'lateTxt':''}">${vtxt}</div></td></tr>`;}).join('');
+}
+function buildLegend(){
+  document.getElementById('legend').innerHTML=
+    `<div class="grp">`+RESP.map(r=>`<span class="lg"><span class="sw" style="background:${colorFor(r)}"></span>${r}</span>`).join('')+`</div>`+
+    `<span class="sep"></span><div class="grp">`+
+    `<span class="lg"><span class="sw" style="background:#9aa3ad"></span>Pendiente</span>`+
+    `<span class="lg"><span class="sw" style="background:#1C7ED6;box-shadow:inset 0 0 0 2.5px #fff"></span>En curso</span>`+
+    `<span class="lg"><span class="sw" style="background:#1C7ED6;opacity:.4"></span>Completado ✓</span>`+
+    `<span class="lg"><span class="sw" style="box-shadow:0 0 0 2px #E03131;background:#fff"></span>Atrasado</span></div>`;
+}
+function render(){buildFilters();buildKpis();buildRoad();buildProgress();buildTable();buildLegend();}
+
+document.getElementById('refreshBtn').onclick=load;
+window.addEventListener('resize',()=>{clearTimeout(window._rz);window._rz=setTimeout(()=>{if(DATA.length)buildRoad();},150);});
+load();
+</script>
+</body>
+</html>
