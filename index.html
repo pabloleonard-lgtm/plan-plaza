@@ -140,7 +140,7 @@
    También podés pasarla por la URL del visor:  ...index.html?csv=LA_URL
    ==================================================================== */
 const CONFIG = {
-  CSV_URL: "https://docs.google.com/spreadsheets/d/e/2PACX-1vSKe0v9gycrEZWJoPvMbZla6CuC6X5tKqfDLrn-DGYufY6UrtFZzdjgcsFYbTVH_1WnluWNzZfBPczr/pubhtml?gid=462054744&single=true"   // <-- pegá la URL del CSV publicado entre las comillas
+  CSV_URL: "https://docs.google.com/spreadsheets/d/e/2PACX-1vSKe0v9gycrEZWJoPvMbZla6CuC6X5tKqfDLrn-DGYufY6UrtFZzdjgcsFYbTVH_1WnluWNzZfBPczr/pub?gid=462054744&single=true&output=csv"
 };
 /* ==================================================================== */
 
@@ -157,7 +157,7 @@ const TODAY=Date.UTC(now.getFullYear(),now.getMonth(),now.getDate());
 
 function getCsvUrl(){
   const q=new URLSearchParams(location.search).get('csv');
-  return (q&&q.trim()) || (CONFIG.CSV_URL&&CONFIG.CSV_URL.trim()) || "https://docs.google.com/spreadsheets/d/e/2PACX-1vSKe0v9gycrEZWJoPvMbZla6CuC6X5tKqfDLrn-DGYufY6UrtFZzdjgcsFYbTVH_1WnluWNzZfBPczr/pubhtml?gid=462054744&single=true";
+  return (q&&q.trim()) || (CONFIG.CSV_URL&&CONFIG.CSV_URL.trim()) || "";
 }
 
 /* ---- CSV parser (maneja comillas, comas y saltos de línea internos) ---- */
@@ -264,7 +264,7 @@ function renderSetup(){
       <li>Elegí la hoja <code>Hitos</code> y el formato <b>CSV</b>. Copiá el enlace.</li>
       <li>Pegá ese enlace acá abajo (o editá <code>CONFIG.CSV_URL</code> en el archivo HTML).</li>
     </ol>
-    <input id="csvIn" placeholder="https://docs.google.com/spreadsheets/d/e/2PACX-1vSKe0v9gycrEZWJoPvMbZla6CuC6X5tKqfDLrn-DGYufY6UrtFZzdjgcsFYbTVH_1WnluWNzZfBPczr/pubhtml?gid=462054744&single=true">
+    <input id="csvIn" placeholder="https://docs.google.com/spreadsheets/d/e/…/pub?gid=0&single=true&output=csv">
     <button onclick="(function(){var u=document.getElementById('csvIn').value.trim();if(u)location.search='?csv='+encodeURIComponent(u);})()">Cargar datos</button>
   </div>`;
 }
